@@ -4,7 +4,7 @@ import ru.geekbrains.java2.client.Command;
 import ru.geekbrains.java2.server.auth.AuthService;
 import ru.geekbrains.java2.server.auth.BaseAuthService;
 import ru.geekbrains.java2.server.client.ClientHandler;
-
+import ru.geekbrains.java2.server.auth.SqlAuthService;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -24,7 +24,7 @@ public class NetworkServer {
 
     public NetworkServer(int port) {
         this.port = port;
-        this.authService = new BaseAuthService();
+        this.authService = new SqlAuthService();
     }
 
     public void start() {

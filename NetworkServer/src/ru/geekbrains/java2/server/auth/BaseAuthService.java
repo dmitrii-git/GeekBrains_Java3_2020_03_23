@@ -3,8 +3,8 @@ package ru.geekbrains.java2.server.auth;
 import java.util.List;
 import java.util.Objects;
 
-public class BaseAuthService implements AuthService {
-
+//public class BaseAuthService implements AuthService {
+public class BaseAuthService  {
     private static class UserData {
         private String login;
         private String password;
@@ -23,7 +23,7 @@ public class BaseAuthService implements AuthService {
             new UserData("login3", "pass3", "username3")
     );
 
-    @Override
+    //@Override
     public String getUsernameByLoginAndPassword(String login, String password) {
         for (UserData userDatum : USER_DATA) {
             if (userDatum.login.equals(login) && userDatum.password.equals(password)) {
@@ -33,12 +33,12 @@ public class BaseAuthService implements AuthService {
         return null;
     }
 
-    @Override
+   // @Override
     public void start() {
         System.out.println("Сервис аутентификации запущен");
     }
 
-    @Override
+    //@Override
     public void stop() {
         System.out.println("Сервис аутентификации оставлен");
     }

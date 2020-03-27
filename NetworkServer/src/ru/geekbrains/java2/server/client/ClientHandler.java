@@ -9,7 +9,7 @@ import ru.geekbrains.java2.server.NetworkServer;
 
 import java.io.*;
 import java.net.Socket;
-
+import java.sql.SQLException;
 
 
 public class ClientHandler {
@@ -40,7 +40,7 @@ public class ClientHandler {
                 try {
                     ClientHandler.this.authentication();
                     ClientHandler.this.readMessages();
-                } catch (IOException e) {
+                } catch (IOException | SQLException | ClassNotFoundException e) {
                     System.out.println("Соединение с клиентом " + nickname + " было закрыто!");
                 } finally {
                     ClientHandler.this.closeConnection();
@@ -102,7 +102,7 @@ public class ClientHandler {
         }
     }
 
-    private void authentication() throws IOException {
+    private void authentication() throws IOException, SQLException, ClassNotFoundException {
         new Thread(() -> {
             try {
                 Thread.sleep(120000);
@@ -125,11 +125,11 @@ public class ClientHandler {
             }
         }
     }
-    private boolean processAuthCommand(Command command) throws IOException {
+    private boolean processAuthCommand(Command command) throws IOException, SQLException, ClassNotFoundException {
         AuthCommand commandData = (AuthCommand) command.getData();
         String login = commandData.getLogin();
         String password = commandData.getPassword();
-        String username = networkServer.getAuthService().getUsernameByLoginAndPassword(login, password);
+        String username = networkServer.getAuthService().getUsernameByLoginAndPasswordSql(login, password);
         if (username == null) {
             Command authErrorCommand = Command.authErrorCommand("Отсутствует учетная запись по данному логину и паролю!");
             sendMessage(authErrorCommand);
