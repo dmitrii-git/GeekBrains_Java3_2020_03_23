@@ -4,6 +4,8 @@ import ru.geekbrains.java2.client.Command;
 import ru.geekbrains.java2.client.view.AuthDialog;
 import ru.geekbrains.java2.client.view.ClientChat;
 import ru.geekbrains.java2.client.model.NetworkService;
+import ru.geekbrains.java2.client.model.FileService;
+
 
 import javax.swing.*;
 import java.io.IOException;
@@ -17,6 +19,8 @@ public class ClientController {
     private final AuthDialog authDialog;
     private final ClientChat clientChat;
     private String nickname;
+    private FileService file = new FileService();
+
 
     public ClientController(String serverHost, int serverPort) {
         this.networkService = new NetworkService(serverHost, serverPort);
@@ -35,6 +39,7 @@ public class ClientController {
             public void authIsSuccessful(String nickname) {
                 ClientController.this.setUserName(nickname);
                 clientChat.setTitle(nickname);
+                clientChat.setName(nickname);
                 ClientController.this.openChat();
             }
         });
@@ -73,6 +78,7 @@ public class ClientController {
     public void sendMessageToAllUsers(String message) {
         try {
             networkService.sendCommand(broadcastMessageCommand(message));
+            //file.writeToFile(nickname, message);
         } catch (IOException e) {
             clientChat.showError("Failed to send message!");
             e.printStackTrace();
@@ -90,6 +96,7 @@ public class ClientController {
     public void sendPrivateMessage(String username, String message) {
         try {
             networkService.sendCommand(privateMessageCommand(username, message));
+            //file.writeToFile(nickname, message);
         } catch (IOException e) {
             showErrorMessage(e.getMessage());
         }
@@ -109,5 +116,9 @@ public class ClientController {
         users.remove(nickname);
         users.add(0, "All");
         clientChat.updateUsers(users);
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }

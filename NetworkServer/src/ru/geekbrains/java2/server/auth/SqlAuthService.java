@@ -17,7 +17,7 @@ public class SqlAuthService implements AuthService {
     public static void Conn() throws ClassNotFoundException, SQLException {
         conn = null;
         Class.forName("org.sqlite.JDBC");
-        conn = DriverManager.getConnection("jdbc:sqlite:TEST1.s3db");
+        conn = DriverManager.getConnection("jdbc:sqlite:users.db");
 
 
     }

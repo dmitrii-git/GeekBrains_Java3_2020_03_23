@@ -26,6 +26,7 @@ public class NetworkService {
     private MessageHandler messageHandler;
     private AuthEvent successfulAuthEvent;
     private String nickname;
+    private FileService file = new FileService();
 
     public NetworkService(String host, int port) {
         this.host = host;
@@ -61,6 +62,7 @@ public class NetworkService {
                                     message = username + ": " + message;
                                 }
                                 messageHandler.handle(message);
+                                //file.writeToFile(username, message);
                             }
                             break;
                         }
