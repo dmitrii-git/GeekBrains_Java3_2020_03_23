@@ -5,3 +5,5 @@ username2 зашел в чат!
 Я: hello
 Я: hi
 Я: welcome
+username2 зашел в чат!
+username2: hello

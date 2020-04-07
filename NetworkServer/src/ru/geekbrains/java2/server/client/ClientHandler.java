@@ -10,9 +10,12 @@ import ru.geekbrains.java2.server.NetworkServer;
 import java.io.*;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ClientHandler {
+    ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     private final NetworkServer networkServer;
     private final Socket clientSocket;
@@ -36,16 +39,19 @@ public class ClientHandler {
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
 
-            new Thread(() -> {
-                try {
-                    ClientHandler.this.authentication();
-                    ClientHandler.this.readMessages();
-                } catch (IOException | SQLException | ClassNotFoundException e) {
-                    System.out.println("Соединение с клиентом " + nickname + " было закрыто!");
-                } finally {
-                    ClientHandler.this.closeConnection();
-                }
-            }).start();
+            //new Thread(() -> {
+            executorService.execute(() -> {
+                        try {
+                            ClientHandler.this.authentication();
+                            ClientHandler.this.readMessages();
+                        } catch (IOException | SQLException | ClassNotFoundException e) {
+                            System.out.println("Соединение с клиентом " + nickname + " было закрыто!");
+                        } finally {
+                            ClientHandler.this.closeConnection();
+                        }
+            });
+            executorService.shutdown();
+            //}).start();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -103,13 +109,16 @@ public class ClientHandler {
     }
 
     private void authentication() throws IOException, SQLException, ClassNotFoundException {
-        new Thread(() -> {
+        //new Thread(() -> {
+        executorService.execute(() -> {
             try {
                 Thread.sleep(120000);
                 ClientHandler.this.closeConnection();
             } catch (InterruptedException e) {
             }
-        }).start();
+        });
+        executorService.shutdown();
+        //}).start();
         while (true) {
             Command command = readCommand();
             if (command == null) {
@@ -158,4 +167,5 @@ public class ClientHandler {
     public String getNickname() {
         return nickname;
     }
+
 }

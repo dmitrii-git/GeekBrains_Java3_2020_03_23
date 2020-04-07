@@ -8,10 +8,12 @@
       <sourceFolder url="file://$MODULE_DIR$/NetworkServer/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/NetworkClientServer/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/NetworkClient/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Homework4" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="library" name="sqlite-jdbc-3.8.11.2" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.8.11.2" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.8.11.2" level="project" />
   </component>
