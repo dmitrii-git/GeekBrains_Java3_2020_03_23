@@ -26,7 +26,7 @@ public class CarRace {
                 new Thread(cars[i]).start();
             }
             if (startLine.getCount() == 0L) System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка началась!!!");
-            //System.out.println("ВАЖНОЕ ОБЪЯВЛЕНИЕ >>> Гонка закончилась!!!");
+
         }
     }
     class Car implements Runnable {
@@ -55,7 +55,6 @@ public class CarRace {
                 System.out.println(this.name + " готовится");
                 Thread.sleep(500 + (int)(Math.random() * 800));
                 CarRace.startLine.countDown();
-                //System.out.println(CarRace.startLine.getCount());
                 System.out.println(this.name + " готов");
                 CarRace.startLine.await();
                 CarRace.start++;
@@ -65,6 +64,10 @@ public class CarRace {
             }
             for (int i = 0; i < race.getStages().size(); i++) {
                 race.getStages().get(i).go(this);
+                if(CarRace.raceWinner == 0 && i == race.getStages().size() - 1) {
+                    Finish.winner(this.name);
+                }
+
             }
         }
     }
@@ -89,7 +92,7 @@ public class CarRace {
                 System.out.println(c.getName() + " закончил этап: " + description);
                 CarRace.finish++;
                 Finish.allFinish();
-                Finish.winner(c.getName());
+
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -116,7 +119,7 @@ public class CarRace {
                     System.out.println(c.getName() + " закончил этап: " + description);
                     CarRace.finish++;
                     Finish.allFinish();
-                    Finish.winner(c.getName());
+
 
                 }
             } catch (Exception e) {
@@ -142,12 +145,12 @@ public class CarRace {
             }
         }
         public static void winner(String racer) {
-            if(CarRace.finish == CarRace.stageLenght && CarRace.raceWinner == 0){
-                 System.out.println("Участник " + racer + " выиграл гонку!!!!");
+                 System.out.println(racer + " выиграл гонку!!!!");
+                 CarRace.raceWinner = 1;
             }
         }
 
-    }
+
 
 
 
