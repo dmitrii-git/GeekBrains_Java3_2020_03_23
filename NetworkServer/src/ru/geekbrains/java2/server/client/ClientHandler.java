@@ -49,7 +49,7 @@ public class ClientHandler {
                             ClientHandler.this.readMessages();
                         } catch (IOException | SQLException | ClassNotFoundException e) {
                             LOGGER.info("Соединение с клиентом " + nickname + " было закрыто!");
-                            System.out.println("Соединение с клиентом " + nickname + " было закрыто!");
+                            //System.out.println("Соединение с клиентом " + nickname + " было закрыто!");
                         } finally {
                             ClientHandler.this.closeConnection();
                         }
@@ -80,7 +80,7 @@ public class ClientHandler {
             switch (command.getType()) {
                 case END:
                     LOGGER.info("Received 'END' command");
-                    System.out.println("Received 'END' command");
+                    //System.out.println("Received 'END' command");
                     return;
                 case PRIVATE_MESSAGE: {
                     PrivateMessageCommand commandData = (PrivateMessageCommand) command.getData();
@@ -97,7 +97,7 @@ public class ClientHandler {
                 }
                 default:
                     LOGGER.error("Unknown type of command : " + command.getType());
-                    System.err.println("Unknown type of command : " + command.getType());
+                    //System.err.println("Unknown type of command : " + command.getType());
             }
         }
     }
@@ -109,7 +109,7 @@ public class ClientHandler {
 
             String errorMessage = "Unknown type of object from client!";
             LOGGER.error(errorMessage);
-            System.err.println(errorMessage);
+            //System.err.println(errorMessage);
             e.printStackTrace();
             sendMessage(Command.errorCommand(errorMessage));
             return null;
@@ -139,7 +139,7 @@ public class ClientHandler {
                 }
             } else {
                 LOGGER.error("Unknown type of command for auth process: " + command.getType());
-                System.err.println("Unknown type of command for auth process: " + command.getType());
+                //System.err.println("Unknown type of command for auth process: " + command.getType());
             }
         }
     }

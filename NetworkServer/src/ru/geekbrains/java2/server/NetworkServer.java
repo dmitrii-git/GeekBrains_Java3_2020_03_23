@@ -29,8 +29,8 @@ public class NetworkServer {
     private final List<ClientHandler> clients = new CopyOnWriteArrayList<>();
     private final AuthService authService;
     private static final Logger LOGGER = LogManager.getLogger(NetworkServer.class);
-    LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
-    File file = new File("/Users/onolite/IdeaProjects1/GeekBrains_Java3_2020_03_23/log4j2.xml");
+    //LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
+    //File file = new File("/Users/onolite/IdeaProjects1/GeekBrains_Java3_2020_03_23/log4j2.xml");
 
 
     public NetworkServer(int port) {
@@ -41,19 +41,19 @@ public class NetworkServer {
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             LOGGER.info("Сервер был успешно запущен на порту " + port);
-            System.out.println("Сервер был успешно запущен на порту " + port);
+            //System.out.println("Сервер был успешно запущен на порту " + port);
             authService.start();
             while (true) {
                 LOGGER.info("Ожидание клиентского подключения...");
-                System.out.println("Ожидание клиентского подключения...");
+                //System.out.println("Ожидание клиентского подключения...");
                 Socket clientSocket = serverSocket.accept();
                 LOGGER.info("Клиент подлючился");
-                System.out.println("Клиент подлючился");
+                //System.out.println("Клиент подлючился");
                 createClientHandler(clientSocket);
             }
         } catch (IOException e) {
             LOGGER.error("Ошибка при работе сервера");
-            System.out.println("Ошибка при работе сервера");
+            //System.out.println("Ошибка при работе сервера");
             e.printStackTrace();
         } finally {
             authService.stop();
