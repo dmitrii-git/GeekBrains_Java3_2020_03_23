@@ -5,6 +5,8 @@ import ru.geekbrains.java2.server.auth.AuthService;
 import ru.geekbrains.java2.server.auth.BaseAuthService;
 import ru.geekbrains.java2.server.client.ClientHandler;
 import ru.geekbrains.java2.server.auth.SqlAuthService;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,6 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+
+
 
 public class NetworkServer {
 
@@ -21,6 +28,10 @@ public class NetworkServer {
 //    private final List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
     private final List<ClientHandler> clients = new CopyOnWriteArrayList<>();
     private final AuthService authService;
+    private static final Logger LOGGER = LogManager.getLogger(NetworkServer.class);
+    //LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
+    //File file = new File("/Users/onolite/IdeaProjects1/GeekBrains_Java3_2020_03_23/log4j2.xml");
+
 
     public NetworkServer(int port) {
         this.port = port;
@@ -29,16 +40,20 @@ public class NetworkServer {
 
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Сервер был успешно запущен на порту " + port);
+            LOGGER.info("Сервер был успешно запущен на порту " + port);
+            //System.out.println("Сервер был успешно запущен на порту " + port);
             authService.start();
             while (true) {
-                System.out.println("Ожидание клиентского подключения...");
+                LOGGER.info("Ожидание клиентского подключения...");
+                //System.out.println("Ожидание клиентского подключения...");
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Клиент подлючился");
+                LOGGER.info("Клиент подлючился");
+                //System.out.println("Клиент подлючился");
                 createClientHandler(clientSocket);
             }
         } catch (IOException e) {
-            System.out.println("Ошибка при работе сервера");
+            LOGGER.error("Ошибка при работе сервера");
+            //System.out.println("Ошибка при работе сервера");
             e.printStackTrace();
         } finally {
             authService.stop();

@@ -7,16 +7,19 @@ import ru.geekbrains.java2.client.command.BroadcastMessageCommand;
 import ru.geekbrains.java2.client.command.PrivateMessageCommand;
 import ru.geekbrains.java2.server.NetworkServer;
 
+
 import java.io.*;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class ClientHandler {
     ExecutorService executorService = Executors.newFixedThreadPool(2);
-
+    private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
     private final NetworkServer networkServer;
     private final Socket clientSocket;
 
@@ -45,7 +48,8 @@ public class ClientHandler {
                             ClientHandler.this.authentication();
                             ClientHandler.this.readMessages();
                         } catch (IOException | SQLException | ClassNotFoundException e) {
-                            System.out.println("Соединение с клиентом " + nickname + " было закрыто!");
+                            LOGGER.info("Соединение с клиентом " + nickname + " было закрыто!");
+                            //System.out.println("Соединение с клиентом " + nickname + " было закрыто!");
                         } finally {
                             ClientHandler.this.closeConnection();
                         }
@@ -75,7 +79,8 @@ public class ClientHandler {
             }
             switch (command.getType()) {
                 case END:
-                    System.out.println("Received 'END' command");
+                    LOGGER.info("Received 'END' command");
+                    //System.out.println("Received 'END' command");
                     return;
                 case PRIVATE_MESSAGE: {
                     PrivateMessageCommand commandData = (PrivateMessageCommand) command.getData();
@@ -91,7 +96,8 @@ public class ClientHandler {
                     break;
                 }
                 default:
-                    System.err.println("Unknown type of command : " + command.getType());
+                    LOGGER.error("Unknown type of command : " + command.getType());
+                    //System.err.println("Unknown type of command : " + command.getType());
             }
         }
     }
@@ -100,8 +106,10 @@ public class ClientHandler {
         try {
              return (Command) in.readObject();
         } catch (ClassNotFoundException e) {
+
             String errorMessage = "Unknown type of object from client!";
-            System.err.println(errorMessage);
+            LOGGER.error(errorMessage);
+            //System.err.println(errorMessage);
             e.printStackTrace();
             sendMessage(Command.errorCommand(errorMessage));
             return null;
@@ -130,7 +138,8 @@ public class ClientHandler {
                     return;
                 }
             } else {
-                System.err.println("Unknown type of command for auth process: " + command.getType());
+                LOGGER.error("Unknown type of command for auth process: " + command.getType());
+                //System.err.println("Unknown type of command for auth process: " + command.getType());
             }
         }
     }
@@ -140,11 +149,13 @@ public class ClientHandler {
         String password = commandData.getPassword();
         String username = networkServer.getAuthService().getUsernameByLoginAndPasswordSql(login, password);
         if (username == null) {
+            LOGGER.error("Отсутствует учетная запись по данному логину и паролю!");
             Command authErrorCommand = Command.authErrorCommand("Отсутствует учетная запись по данному логину и паролю!");
             sendMessage(authErrorCommand);
             return false;
         }
         else if (networkServer.isNicknameBusy(username)) {
+            LOGGER.error("Данный пользователь уже авторизован!");
             Command authErrorCommand = Command.authErrorCommand("Данный пользователь уже авторизован!");
             sendMessage(authErrorCommand);
             return false;
@@ -152,6 +163,7 @@ public class ClientHandler {
         else {
             nickname = username;
             String message = nickname + " зашел в чат!";
+            LOGGER.info(message);
             networkServer.broadcastMessage(Command.messageCommand(null, message), this);
             commandData.setUsername(nickname);
             sendMessage(command);
