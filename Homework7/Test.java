@@ -3,10 +3,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Test {
     int priority() default 0;
+    Class<? extends Throwable> expected() default org.junit.Test.None.class;
+
+    long timeout() default 0L;
+
+    public static class None extends Throwable {
+        private static final long serialVersionUID = 1L;
+
+        private None() {
+        }
+    }
+
 
     @interface AfterSuite{
 
@@ -17,22 +29,8 @@ public @interface Test {
     }
 }
 
-class MainTest {
-    public void start(Class testClass) {
-        @Test.BeforeSuite
-        public void before(){
 
-        }
-        @Test(priority = 1){
 
-        }
 
-        @Test.AfterSuite
-        public void after(){
 
-        }
-
-    }
-
-}
 
