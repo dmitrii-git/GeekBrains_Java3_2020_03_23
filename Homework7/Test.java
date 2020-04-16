@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 
 public @interface Test {
+    int priority() default 0;
     @interface BeforeSuite {}
     @interface AfterSuite {}
 }

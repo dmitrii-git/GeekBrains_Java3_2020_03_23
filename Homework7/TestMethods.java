@@ -1,23 +1,31 @@
 public class TestMethods {
 
 
-    @Test
-    public boolean isNull(Class TestClass){
-        int priority = 1;
-        if (TestClass == null) {
-            return true;
-        }
-        else return false;
-    }
+    @Test(priority = 3)
+    public boolean isNull(Object TestClass) {
 
-    @Test
-    public boolean isNotNull(Class TestClass){
-        int priority = 2;
         if (TestClass == null) {
+            System.out.println("Test isNull passed");
+            return true;
+
+        } else {
+            System.out.println("Test isNull not passed");
             return false;
         }
-        else return true;
     }
+
+    @Test(priority = 5)
+    public boolean isNotNull(Object TestClass) {
+
+        if (TestClass == null) {
+            System.out.println("Test isNotNull not passed");
+            return false;
+        } else {
+            System.out.println("Test isNotNull passed");
+            return true;
+        }
+    }
+
 
     @Test.BeforeSuite
     public void Before(){
